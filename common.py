@@ -17,7 +17,25 @@ def send_request(url):
         return response_json
     else:
         return None
-    
+
+def list_el_shard(list_nodes, response, shards_rotation):
+    result = dict()
+    for node in list_nodes:
+        list_swap_shard = list()
+        for num_shard in range(shards_rotation):
+            for each_shard in response:
+                if each_shard["node"] == node and each_shard not in list_swap_shard:
+                    list_swap_shard.append(each_shard)
+                    break
+        result[node] = list_swap_shard
+    return result
+
+def list_name_from_dict(datadict):
+    result = list()
+    for each_dict in datadict:
+        result.append(each_dict["node"])
+    return result
+
 def format_bytes(num_bytes):
 	"""
 	Formats a number into human-friendly byte units (KiB, MiB, etc)
