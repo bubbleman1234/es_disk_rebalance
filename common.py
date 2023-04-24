@@ -9,13 +9,27 @@ def find_average(nodes):
     avg = round(total_usage/len(nodes))
     return avg
 
-def send_request(url):
-    response = requests.get(url)
+def send_request(url, method="get", payload=""):
+    if method.lower() == "get":
+        response = requests.get(url)
+    elif method.lower() == "post":
+        response = requests.post(url, json=payload)
+    elif method.lower() == "put":
+        response = requests.put(url)
+    elif method.lower() == "delete":
+        response = requests.delete(url)
+    else:
+        return None
+    
     if response.status_code == 200:
         response_text = response.text
         response_json = json.loads(response_text)
         return response_json
     else:
+        print("!!!!! Sending Request Error !!!!!")
+        print("Error Code: {0}".format(response.status_code))
+        print("Error Detail:")
+        print(response.text)
         return None
 
 def list_el_shard(list_nodes, response, shards_rotation):
